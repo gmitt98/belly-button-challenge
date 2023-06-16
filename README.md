@@ -7,7 +7,10 @@ The repo contains the following folders and files:
 
 * "Images" folder: images associated with the project, including examples of what charts should look like.
 * "data" folder: currently contains a copy of the samples.json that we use. The dashboard pulls data from a URL, this is just a copy.
-* "static" folder
-* "js" folder
+* "static" folder: contains "js" folder that holds our JavaScript app
+* index.html: the webpage for the dashboard linked above
+* README file
 
+
+The dashboard is built in JavaScript using Plotly.
 
