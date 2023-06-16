@@ -23,6 +23,7 @@ d3.json(url).then(function(data) {
 // Function that will update the chart, it takes the Subject ID and the data as arguments
 function updateBarChart(id, data) {
     let sample = data.samples.filter(sample => sample.id === id)[0]; // Filters the data to just the sample we want - matching the ID selected
+    console.log('this is the sample data for the bar')
     console.log(sample) // Checking that this is the right sample each time
     let otu_ids = sample.otu_ids.slice(0, 10).map(otu_id => `OTU ${otu_id}`).reverse(); // Gets the top 10 OTUs - reverse to make descending order
     let sample_values = sample.sample_values.slice(0, 10).reverse(); // Gets the values for those top 10 OTUs
@@ -47,6 +48,7 @@ function updateBarChart(id, data) {
 // Function that will update the bubble chart
 function updateBubbleChart(id, data) {
     let sample = data.samples.filter(sample => sample.id === id)[0]; // Filters the data to just the sample we want - matching the ID selected
+    console.log('this is the sample data for the bubble')
     console.log(sample) // Checking that this is the right sample each time
     let otu_ids = sample.otu_ids.slice(0, 10).map(otu_id => `OTU ${otu_id}`).reverse(); // Gets the top 10 OTUs - reverse to make descending order
     let sample_values = sample.sample_values.slice(0, 10).reverse(); // Gets the values for those top 10 OTUs
@@ -67,14 +69,26 @@ function updateBubbleChart(id, data) {
     let layout2 = {
         title: 'Bubble chart'
     };
-    Plotly.newPlot("bubble", [trace2], layout2)
+    Plotly.newPlot("bubble", [trace2], layout2);
 };
+
+function updateMetaData(id, data){
+    let meta = data.metadata.filter(meta => meta.id === Number(id))[0];
+    console.log('this is the metadata')
+    console.log(meta);
+    d3.select("#sample-metadata").html("");
+       Object.entries(meta).forEach(([key,value]) => {
+        console.log(key,value);
+        d3.select("#sample-metadata").append("p").text(`${key}: ${value}`);
+    });
+}
 
 // Update chart when new dropdown option is selected
 d3.selectAll("#selDataset").on("change", function() { // When the dropdown list is changed, i.e. new option selected...
     let newId = d3.select(this).property("value"); // Get the Subject ID from the 'value' off the dropdown list 
     d3.json(url).then(function(data) {
-        updateBarChart(newId, data), // Run the update function we wrote
-        updateBubbleChart(newId, data)
+        updateBarChart(newId, data); // Run the update function we wrote
+        updateBubbleChart(newId, data);
+        updateMetaData(newId, data);
     });
 });
